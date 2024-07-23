@@ -1,0 +1,57 @@
+//- layout.pug
+include ../config/config
+block config
+doctype html
+html(lang="es")
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description' content='')
+    meta(name='author' content='')
+    title #{siteName} | #{pageName}
+
+    // Css Bootstrap
+    link(rel="stylesheet" href="css/app.css")
+    link(rel="stylesheet" href="css/prism.css")
+    link(rel="stylesheet" href="css/bootstrapicons.css")
+    link(rel="stylesheet" href="css/custom.css")
+
+    block styles
+  body
+
+    .navbar.navbar-expand-lg.fixed-top.bg-body(data-bs-theme='dark')
+      .container
+        a.navbar-brand(href='../') PiruUI
+        button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarResponsive.collapse.navbar-collapse
+          //-ul.navbar-nav
+            li.nav-item
+              a.nav-link(href='/') Help
+            li.nav-item
+              a.nav-link(href='/') Blog 
+              
+          ul.navbar-nav.ms-md-auto
+            li.nav-item
+              a.nav-link(target='_blank' rel='noopener' href='https://github.com/pirulug/')
+                | GitHub
+            li.nav-item
+              a.nav-link(target='_blank' rel='noopener' href='https://x.com/pirulug')
+                | Twitter
+              
+            li.nav-item
+              button#bd-theme-toggle.nav-link.py-2.d-flex.align-items-center(type='button')
+                span#bd-theme-icon.theme-icon-active.mr-1
+                  // Aquí se actualizará el ícono dinámicamente
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                span#bd-theme-text.visually-hidden Toggle theme
+    
+    .container
+      block content
+
+    // Js Bootstrap
+    script(src='js/app.js')
+    script(src='js/prism.js')
+    script(src='js/custom.js')
+
+    block scripts 

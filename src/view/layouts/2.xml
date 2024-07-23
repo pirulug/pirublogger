@@ -1,0 +1,316 @@
+<b:comment>
+                      ##################################################
+                      Breadcrumb
+                      ##################################################
+                    </b:comment>
+<b:if cond='!data:view.isHomepage'>
+  <div class='card card-body text-bg-dark  mb-3'>
+    <ol class='breadcrumb m-0' id='breadcrumb'>
+      <li class='breadcrumb-item'>
+        <a expr:href='data:blog.homepageUrl'>
+          <data:messages.home/>
+        </a>
+      </li>
+      <b:comment>### Post page ###</b:comment>
+      <b:if cond='data:view.isPost'>
+        <b:loop values='data:posts' var='post'>
+          <li class='breadcrumb-item active'>
+            <span class='mr-1'>Post:</span>
+            <span>
+              <b:eval expr='data:post.title ? data:post.title : data:messages.noTitle'/>
+            </span>
+          </li>
+        </b:loop>
+      </b:if>
+      <b:comment>### Static page ###</b:comment>
+      <b:if cond='data:view.isPage'>
+        <b:loop values='data:posts' var='post'>
+          <li class='breadcrumb-item active'>
+            <span class='mr-1'>Page:</span>
+            <span>
+              <b:eval expr='data:post.title ? data:post.title : data:messages.noTitle'/>
+            </span>
+          </li>
+        </b:loop>
+      </b:if>
+      <b:comment>### Search (label) page ###</b:comment>
+      <b:if cond='data:view.isLabelSearch'>
+        <li class='breadcrumb-item'>
+          <a expr:href='path(data:blog.homepageUrl, &quot;/search&quot;)'>
+                                Buscar
+                              </a>
+        </li>
+        <li class='breadcrumb-item active'>
+          <span class='mr-1'>Label:</span>
+          <span>
+            <data:view.search.label/>
+          </span>
+        </li>
+      </b:if>
+      <b:comment>### Search (query) page ###</b:comment>
+      <b:if cond='data:view.search.query'>
+        <li class='breadcrumb-item'>
+          <a expr:href='path(data:blog.homepageUrl, &quot;/search&quot;)'>
+                                Buscar
+                              </a>
+        </li>
+        <li class='breadcrumb-item active'>
+          <span class='mr-1'>Consulta:</span>
+          <span>
+            <data:view.search.query/>
+          </span>
+        </li>
+      </b:if>
+      <b:comment>### Search (default) page ###</b:comment>
+      <b:if cond='data:view.isSearch and !data:view.isLabelSearch and !data:view.search.query'>
+        <li class='breadcrumb-item active'>
+          <span>Search</span>
+        </li>
+      </b:if>
+      <b:comment>### Archive page ###</b:comment>
+      <b:if cond='data:view.isArchive'>
+        <b:if cond='data:view.archive.month'>
+          <li class='breadcrumb-item'>
+            <a expr:href='data:blog.homepageUrl + data:view.archive.year'>
+              <data:view.archive.year/>
+            </a>
+          </li>
+          <li class='breadcrumb-item active'>
+            <span>
+              <data:view.archive.month/>
+            </span>
+          </li>
+          <b:else/>
+          <li class='breadcrumb-item active'>
+            <span>
+              <data:view.archive.year/>
+            </span>
+          </li>
+        </b:if>
+      </b:if>
+      <b:comment>### Error page ###</b:comment>
+      <b:if cond='data:view.isError'>
+        <li class='breadcrumb-item active'>
+          <span>404</span>
+        </li>
+      </b:if>
+    </ol>
+  </div>
+</b:if>
+<b:comment>
+                      ##################################################
+                      Not found message
+                      ##################################################
+                    </b:comment>
+<b:comment>### Homepage ###</b:comment>
+<b:if cond='data:view.isHomepage'>
+  <b:if cond='data:posts.empty'>
+    <div class='alert alert-warning mb-3' id='not-found-message' role='alert'>
+      <data:messages.theresNothingHere/>
+    </div>
+  </b:if>
+</b:if>
+<b:comment>### Search (label|query|default) page | Archive page ###</b:comment>
+<b:if cond='data:view.isSearch or data:view.isArchive'>
+  <b:if cond='data:posts.empty'>
+    <div class='alert alert-warning mb-3' id='not-found-message' role='alert'>
+      <data:messages.noResultsFound/>
+    </div>
+  </b:if>
+</b:if>
+<b:comment>### INDEX ###</b:comment>
+<div class='row row-cols-1 row-cols-lg-3'>
+  <b:if cond='data:posts.notEmpty'>
+    <b:if cond='data:view.isMultipleItems'>
+      <b:loop values='data:posts' var='post'>
+        <div class='col mb-3'>
+          <div class='card text-bg-dark'>
+            <b:comment>=== Imagen ===</b:comment>
+            <b:if cond='data:post.thumbnailUrl'>
+              <b:if cond='data:post.featuredImage.isYoutube'>
+                <a class='box-img' expr:href='data:post.link ?: data:post.url'>
+                  <img class='card-img-top' expr:alt='data:post.title ? data:post.title : data:messages.image' expr:src='data:post.featuredImage.youtubeMaxResDefaultUrl.isResizable ? resizeImage(data:post.featuredImage.youtubeMaxResDefaultUrl, 200, &quot;16:9&quot;) : data:post.featuredImage.youtubeMaxResDefaultUrl'/>
+                </a>
+                <b:else/>
+                <a class='box-img' expr:href='data:post.link ?: data:post.url'>
+                  <img class='card-img-top' expr:alt='data:post.title ? data:post.title : data:messages.image' expr:src='data:post.thumbnailUrl ? resizeImage(data:post.thumbnailUrl, 300, &quot;16:9&quot;) : data:post.thumbnail'/>
+                </a>
+              </b:if>
+              <b:else/>
+              <a class='box-img' expr:href='data:post.link ?: data:post.url'>
+                <img alt='' class='card-img-top' height='207' src='https://upload.wikimedia.org/wikipedia/commons/d/da/Imagen_no_disponible.svg'/>
+              </a>
+            </b:if>
+            <div class='card-body'>
+              <b:comment>=== LABEL ===</b:comment>
+              <b:if cond='!data:tags'>
+                <div class='box-label'>
+                  <b:loop index='i' values='data:post.labels' var='label'>
+                    <a class='badge bg-success text-decoration-none link-light' expr:href='params(data:label.url, { max-results: &quot;12&quot; })'>
+                      <data:label.name/>
+                    </a>
+                    <!-- separator -->
+                    <b:if cond='data:i != (data:post.labels.size - 1)'>
+                      <span class='text-muted'> </span>
+                    </b:if>
+                  </b:loop>
+                </div>
+              </b:if>
+              <b:comment>=== Titulo ===</b:comment>
+              <h5 class='box-title'>
+                <a class='text-decoration-none' expr:href='data:post.url'>
+                  <data:post.title/>
+                </a>
+              </h5>
+            </div>
+            <b:comment>=== Leer mas ===</b:comment>
+            <div class='card-footer d-flex justify-content-between align-items-center'>
+              <time>
+                <data:post.date/>
+              </time>
+              <a class='btn btn-sm btn-outline-primary' expr:href='data:post.url'>Leer mas</a>
+            </div>
+          </div>
+        </div>
+      </b:loop>
+    </b:if>
+  </b:if>
+</div>
+<b:comment>### Post page ###</b:comment>
+<b:if cond='data:posts.notEmpty'>
+  <b:if cond='data:view.isPost'>
+    <b:loop values='data:posts' var='post'>
+      <article class='' expr:id='&quot;post-&quot; + data:post.id'>
+        <div class='card card-body text-bg-dark mb-3 text-center'>
+          <b:comment>=== Title ===</b:comment>
+          <h1 class='fw-bolder mb-1'>
+            <b:eval expr='data:post.title ? data:post.title : data:messages.noTitle'/>
+          </h1>
+          <b:comment>=== Meta ===</b:comment>
+          <div class='fst-italic mb-2'>
+                                Publicado
+            <time expr:datetime='data:post.date.iso8601' expr:title='data:post.date.iso8601'>
+              <data:post.date/>
+            </time>
+            <span>
+              <data:messages.by/>
+            </span>
+            <b:if cond='data:post.author.profileUrl'>
+              <a expr:href='data:post.author.profileUrl'>
+                <b:eval expr='data:post.author ? data:post.author.name : &quot;Anonymous&quot;'/>
+              </a>
+              <b:else/>
+              <!-- no profileUrl -->
+              <span>
+                <b:eval expr='data:post.author ? data:post.author.name : &quot;Anonymous&quot;'/>
+              </span>
+            </b:if>
+          </div>
+          <b:comment>=== Labels ===</b:comment>
+          <b:if cond='data:post.labels'>
+            <div class=''>
+              <b:loop index='i' values='data:post.labels' var='label'>
+                <a class='badge bg-success text-decoration-none link-light' expr:href='params(data:label.url, { max-results: &quot;12&quot; })'>
+                  <data:label.name/>
+                </a>
+                <!-- separator -->
+                <b:if cond='data:i != (data:post.labels.size - 1)'>
+                  <span class='text-muted'> </span>
+                </b:if>
+              </b:loop>
+            </div>
+          </b:if>
+        </div>
+        <b:comment>=== Body ===</b:comment>
+        <div class='card card-body text-bg-dark markdown-body mb-3'>
+          <data:post.body/>
+        </div>
+        <b:comment>=== compartir ===</b:comment>
+        <div class='card card-body text-bg-dark'>
+          <div class='row'>
+            <h5 class='col-xl-3 col-md-12 col-sm-12 text-center'>Compartir:</h5>
+            <div class='col-xl-9 col-md-12 col-sm-12'>
+              <div class='row'>
+                <!-- Share to Facebook -->
+                <a aria-label='Facebook' class='btn btn-primary col mx-1' expr:href='&quot;https://www.facebook.com/sharer.php?u=&quot; + data:blog.url.canonical' rel='external' role='button' target='_blank'>
+                  <i class='fa-brands fa-facebook-square'/> Facebook
+                </a>
+                <!-- Share to Whatsapp -->
+                <a aria-label='Whatsapp' class='btn btn-primary col mx-1' expr:href='&quot;https://api.whatsapp.com/send?text=&quot; + data:blog.url.canonical' rel='external' role='button' target='_blank'>
+                  <i class='fa-brands fa-twitter'/>  Whatsapp
+                </a>
+                <!-- Share to Twitter -->
+                <a aria-label='Twitter' class='btn btn-primary col mx-1' expr:href='&quot;https://twitter.com/share?url=&quot; + data:blog.url.canonical' rel='external' role='button' target='_blank'>
+                  <i class='fa-brands fa-twitter'/> Twitter
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </b:loop>
+  </b:if>
+</b:if>
+<b:comment>### Static page ###</b:comment>
+<b:if cond='data:posts.notEmpty'>
+  <b:if cond='data:view.isPage'>
+    <b:loop values='data:posts' var='post'>
+      <article class='card card-body text-bg-dark mb-3' expr:id='&quot;post-&quot; + data:post.id'>
+        <div class='card-body'>
+          <b:comment>=== Title ===</b:comment>
+          <h1 class='mb-3'>
+            <b:eval expr='data:post.title ? data:post.title : data:messages.noTitle'/>
+          </h1>
+          <b:comment>=== Body ===</b:comment>
+          <div class='markdown-body mb-3'>
+            <data:post.body/>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </article>
+    </b:loop>
+  </b:if>
+</b:if>
+<b:comment>
+                      ##################################################
+                      Pager
+                      ##################################################
+                    </b:comment>
+<b:if cond='data:posts.notEmpty and !data:view.isPage'>
+  <div class='card card-body text-bg-dark mt-3'>
+    <nav class='d-flex flex-nowrap justify-content-between' id='pager'>
+      <a class='btn btn-outline-primary' id='pager-newer' role='button'>
+        <b:attr expr:value='data:newerPageUrl ? data:newerPageUrl : &quot;#&quot;' name='href'/>
+        <b:class cond='!data:newerPageUrl' name='disabled'/>
+        <data:messages.newer/>
+      </a>
+      <a class='btn btn-outline-primary' id='pager-home' role='button'>
+        <b:attr expr:value='data:blog.homepageUrl' name='href'/>
+        <data:messages.home/>
+      </a>
+      <a class='btn btn-outline-primary' id='pager-older' role='button'>
+        <b:attr expr:value='data:olderPageUrl ? data:olderPageUrl : &quot;#&quot;' name='href'/>
+        <b:class cond='!data:olderPageUrl' name='disabled'/>
+        <data:messages.older/>
+      </a>
+    </nav>
+  </div>
+</b:if>
+<b:comment>
+                      ##################################################
+                      Comments
+                      ##################################################
+                    </b:comment>
+<b:comment>### Post page | Static page ###</b:comment>
+<b:if cond='data:view.isPost or data:view.isPage'>
+  <b:loop values='data:posts' var='post'>
+    <div class='card card-body text-bg-dark my-3'>
+      <b:include cond='data:blog.pageType in {&quot;static_page&quot;,&quot;item&quot;}' data='post' name='comment_picker'/>
+    </div>
+  </b:loop>
+</b:if>
+
+<div class='post-outer'>
+  <b:include data='post' name='post'/>
+  <b:include cond='data:blog.pageType in {&quot;static_page&quot;,&quot;item&quot;}' data='post' name='comment_picker'/>
+</div>
