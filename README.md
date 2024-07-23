@@ -1,9 +1,9 @@
 # Piru Blogger
 
-```bash
-https://cdn.jsdelivr.net/gh/pirulug/prismjs@v0.0.1/prism.css
+```html
+<link href='https://cdn.jsdelivr.net/gh/pirulug/pirublogger@v0.0.1/dist/css/app.css' rel='stylesheet'/>
 ```
 
-```bash
-https://cdn.jsdelivr.net/gh/pirulug/prismjs@v0.0.1/prism.js
+```html
+ <script src='https://cdn.jsdelivr.net/gh/pirulug/pirublogger@v0.0.1/dist/js/app.js'/>
 ```

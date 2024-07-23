@@ -27,8 +27,35 @@ body {
 #main-container {
   margin-top: 5rem;
 
-  img {
-    @extend .img-fluid;
-    border-radius: $border-radius;
+  .main-post_content {
+    img {
+      @extend .img-fluid;
+      border-radius: $border-radius;
+    }
+  }
+}
+
+// Widget{
+.widget {
+  &.BlogSearch {
+    .widget-content {
+      input {
+        @extend .form-control;
+      }
+    }
+  }
+
+  &.PopularPosts {
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      list-style: none;
+    }
+  }
+
+  .title,
+  h2 {
   }
 }
